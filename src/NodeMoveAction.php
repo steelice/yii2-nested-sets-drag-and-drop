@@ -8,6 +8,7 @@
 
 namespace klisl\nestable;
 
+use common\models\product\Catalogue;
 use Yii;
 use yii\base\Action;
 use yii\db\ActiveQuery;
@@ -51,19 +52,23 @@ class NodeMoveAction extends Action
 
         /* response will be in JSON format */
         Yii::$app->response->format = 'json';
-        
-        $primaryKey = $this->primaryKey();
+
+        $modelName = $this->modelName;
+
+
+        $primaryKey = $modelName::primaryKey();
+
         if (!isset($primaryKey[0])) {
                 throw new Exception('"' . get_class($this) . '" must have a primary key.');
         }
         
-        $id = $primaryKey[0];
+        $modelPrimaryKey = $primaryKey[0];
 
         /* Locate the supplied model, left, right and parent models */
-        $model = Yii::createObject(ActiveQuery::className(), [$this->modelName])->where([$id => $id])->one();
-        $lft   = Yii::createObject(ActiveQuery::className(), [$this->modelName])->where([$id => $lft])->one();
-        $rgt   = Yii::createObject(ActiveQuery::className(), [$this->modelName])->where([$id => $rgt])->one();
-        $par   = Yii::createObject(ActiveQuery::className(), [$this->modelName])->where([$id => $par])->one();
+        $model = Yii::createObject(ActiveQuery::className(), [$this->modelName])->where([$modelPrimaryKey => $id])->one();
+        $lft   = Yii::createObject(ActiveQuery::className(), [$this->modelName])->where([$modelPrimaryKey => $lft])->one();
+        $rgt   = Yii::createObject(ActiveQuery::className(), [$this->modelName])->where([$modelPrimaryKey => $rgt])->one();
+        $par   = Yii::createObject(ActiveQuery::className(), [$this->modelName])->where([$modelPrimaryKey => $par])->one();
 
         /* Get attribute names from model behaviour config */
         foreach($model->behaviors as $behavior) {
@@ -104,7 +109,7 @@ class NodeMoveAction extends Action
 
         /* report new position */
         return ['updated' => [
-            $id => $model->getAttribute($id),
+            $modelPrimaryKey => $model->getAttribute($modelPrimaryKey),
             'depth' => $model->{$this->depthAttribute},
             'lft' => $model->{$this->leftAttribute},
             'rgt' => $model->{$this->rightAttribute},
