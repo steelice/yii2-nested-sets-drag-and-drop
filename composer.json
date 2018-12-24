@@ -24,7 +24,7 @@
   },
   "autoload": {
     "psr-4": {
-      "steelice\\nestable\\": "src"
+      "klisl\\nestable\\": "src"
     }
   }
 }
