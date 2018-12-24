@@ -1,5 +1,5 @@
 {
-  "name": "klisl/yii2-nested-sets-drag-and-drop",
+  "name": "steelice/yii2-nested-sets-drag-and-drop",
   "description": "Package",
   "type": "yii2-extension",
   "keywords": [
@@ -24,7 +24,7 @@
   },
   "autoload": {
     "psr-4": {
-      "klisl\\nestable\\": "src"
+      "steelice\\nestable\\": "src"
     }
   }
 }
